@@ -1,0 +1,7 @@
+[project]
+name = "brent"
+version = "0.1.0"
+description = "Brent is a discord bot for reporting the most recent crowd-sourced location of The Goons in Escape From Tarkov."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
