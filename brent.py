@@ -1,10 +1,50 @@
+from datetime import datetime, timedelta
+from enum import Enum
 import os
+from typing import Tuple
 
+import arrow
+from bs4 import BeautifulSoup
 import discord
 from discord.ext import tasks
-
+import requests
 
 TOKEN = os.getenv("DISCORD_TOKEN", "F4K353C123TT0K3N")
+
+
+class Tracker:
+    url: str
+    time_format: str = "MMM DD, YYYY HH:mm A ZZZ"
+
+    def parse(self, text):
+        return "UNKNOWN", arrow.now()
+
+    def get_em(self) -> Tuple[str, datetime]:
+        soup = BeautifulSoup(requests.get(self.url).text, "html.parser")
+        l, t = self.parse(soup)
+        return l, arrow.get(t, self.time_format)
+
+
+class TarkovPal(Tracker):
+    url = "https://tarkovpal.com/api"
+
+    def parse(self, text):
+        return [x.text for x in text.find(id="trackings").tbody.tr.contents[:2]]
+
+
+class GoonTracker(Tracker):
+    url = "https://www.goon-tracker.com/"
+    time_format = "YYYY-MM-DD HH:mm:ss"
+
+    def parse(self, text):
+        return [x.text for x in text.find(id="trackings").tbody.tr.contents[:2]]
+
+
+class TarkovGoonTracker(Tracker):
+    url = "https://www.tarkov-goon-tracker.com/"
+
+    def parse(self, text):
+        return [x.text for x in text.find(id="trackings").tbody.tr.contents[:2]]
 
 
 class Brent(discord.Client):
