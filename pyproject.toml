@@ -9,7 +9,10 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License"
 ]
 dependencies = [
+    "arrow",
+    "beautifulsoup4",
     "discord.py",
+    "requests"
 ]
 
 [tool.ruff]
