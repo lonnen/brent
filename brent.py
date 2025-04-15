@@ -13,8 +13,9 @@ TOKEN = os.getenv("DISCORD_TOKEN", "F4K353C123TT0K3N")
 
 
 class Tracker:
-    url: str
+    name: str = "Tracker"
     time_format: str = "MMM DD, YYYY HH:mm A ZZZ"
+    url: str
 
     def parse(self, text):
         return "UNKNOWN", arrow.now()
@@ -26,6 +27,7 @@ class Tracker:
 
 
 class TarkovPal(Tracker):
+    name = "Tarkov Pal"
     url = "https://tarkovpal.com/api"
 
     def parse(self, text):
@@ -33,6 +35,7 @@ class TarkovPal(Tracker):
 
 
 class GoonTracker(Tracker):
+    name = "Goon Tracker"
     url = "https://www.goon-tracker.com/"
     time_format = "YYYY-MM-DD HH:mm:ss"
 
@@ -41,6 +44,7 @@ class GoonTracker(Tracker):
 
 
 class TarkovGoonTracker(Tracker):
+    name = "Tarkov Goon Tracker"
     url = "https://www.tarkov-goon-tracker.com/"
 
     def parse(self, text):
