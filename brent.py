@@ -55,7 +55,7 @@ class Brent(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.trackers: Tracker = [TarkovPal, GoonTracker, TarkovGoonTracker]
+        self.trackers: Tracker = [TarkovPal(), GoonTracker(), TarkovGoonTracker()]
 
         self.location = "UNKNOWN"
         self.last_sighting = arrow.now()
