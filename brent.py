@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from enum import Enum
+import json
 import os
 from typing import Tuple
 
@@ -30,8 +31,9 @@ class TarkovPal(Tracker):
     name = "Tarkov Pal"
     url = "https://tarkovpal.com/api"
 
-    def parse(self, text):
-        return [x.text for x in text.find(id="trackings").tbody.tr.contents[:2]]
+    def parse(self, text) -> Tuple[str, str]:
+        j = json.loads(text.string)
+        return j["Current Map"][0], j["Time"][0]
 
 
 class GoonTracker(Tracker):
