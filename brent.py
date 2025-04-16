@@ -92,8 +92,8 @@ class Brent(discord.Client):
                 self.last_sighting = sighting
                 self.source = tracker.name
 
-        dt = arrow.humanize(
-            now - self.last_sighting, only_distance=True, granularity=["hour", "minute"]
+        dt = self.last_sighting.humanize(
+            now, only_distance=True
         )
         await self.change_presence(
             status=discord.Status.online,
