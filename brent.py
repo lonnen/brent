@@ -30,6 +30,7 @@ class Tracker:
 class TarkovPal(Tracker):
     name = "Tarkov Pal"
     url = "https://tarkovpal.com/api"
+    time_format = "MMMM D, YYYY, H:m A"
 
     def parse(self, text) -> Tuple[str, str]:
         j = json.loads(text.string)
