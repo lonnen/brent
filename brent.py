@@ -69,7 +69,7 @@ class Brent(discord.Client):
         self.trackers: Tracker = [TarkovPal(), GoonTracker(), TarkovGoonTracker()]
 
         self.location = "UNKNOWN"
-        self.last_sighting = arrow.now()
+        self.last_sighting = arrow.Arrow(1970, 1, 1, 0, 0, 0)
         self.source = "UNKNOWN"
 
     async def setup_hook(self) -> None:
