@@ -19,11 +19,19 @@ class Tracker:
     url: str
 
     def parse(self, text):
-        return "UNKNOWN", arrow.now()
+        return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
 
     def get_em(self) -> Tuple[str, datetime]:
-        soup = BeautifulSoup(requests.get(self.url).text, "html.parser")
-        l, t = self.parse(soup)
+        r = requests.get(self.url)
+        if not r.ok:
+            print(f"Error while fetching {self.name} - {r.status_code}")
+            return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
+        soup = BeautifulSoup(r.text, "html.parser")
+        try:
+            l, t = self.parse(soup)
+        except AttributeError as ae:
+            print(f"Error while fetching {self.name} - {ae}")
+            return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
         return l, arrow.get(t, self.time_format)
 
 
