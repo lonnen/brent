@@ -55,20 +55,38 @@ class Brent(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.location = "unknown"
+        self.trackers: Tracker = [TarkovPal, GoonTracker, TarkovGoonTracker]
+
+        self.location = "UNKNOWN"
+        self.last_sighting = arrow.now()
+        self.source = "UNKNOWN"
 
     async def setup_hook(self) -> None:
         self.poll_sightings.start()
 
     async def on_ready(self):
         await self.change_presence(
-            status=discord.Status.Online, activity=discord.game("a video game")
+            status=discord.Status.idle, activity=discord.game("Raid Loading...")
         )
         print(f"Logged in as {self.user} (ID: {self.user.id})")
 
     @tasks.loop(seconds=300)  # every 5 minutes
     async def poll_sightings(self):
-        print("Fetch. Parse.")
+        now = arrow.now()
+        for tracker in self.trackers:
+            loc, sighting = tracker.get_em()
+            if sighting > self.last_sighting:
+                self.location = loc
+                self.last_sighting = sighting
+                self.source = tracker.name
+
+        dt = arrow.humanize(
+            now - self.last_sighting, only_distance=True, granularity=["hour", "minute"]
+        )
+        self.change_presence(
+            status=discord.Status.online,
+            activity=discord.game(f"{self.location} {dt} ago ({self.source})"),
+        )
 
     @poll_sightings.before_loop
     async def before_polling(self):
