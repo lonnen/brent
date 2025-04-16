@@ -66,7 +66,7 @@ class Brent(discord.Client):
 
     async def on_ready(self):
         await self.change_presence(
-            status=discord.Status.idle, activity=discord.game("Raid Loading...")
+            status=discord.Status.idle, activity=discord.Game("Raid Loading...")
         )
         print(f"Logged in as {self.user} (ID: {self.user.id})")
 
@@ -85,7 +85,7 @@ class Brent(discord.Client):
         )
         self.change_presence(
             status=discord.Status.online,
-            activity=discord.game(f"{self.location} {dt} ago ({self.source})"),
+            activity=discord.Game(f"{self.location} {dt} ago ({self.source})"),
         )
 
     @poll_sightings.before_loop
