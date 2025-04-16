@@ -51,7 +51,7 @@ class GoonTracker(Tracker):
     time_format = "YYYY-MM-DD HH:mm:ss"
 
     def parse(self, text):
-        return [x.text for x in text.find('tbody').tr.contents[1:4:2]]
+        return [x.text for x in text.find("tbody").tr.contents[1:4:2]]
 
 
 class TarkovGoonTracker(Tracker):
@@ -92,9 +92,7 @@ class Brent(discord.Client):
                 self.last_sighting = sighting
                 self.source = tracker.name
 
-        dt = self.last_sighting.humanize(
-            now, only_distance=True
-        )
+        dt = self.last_sighting.humanize(now, only_distance=True)
         await self.change_presence(
             status=discord.Status.online,
             activity=discord.CustomActivity(
