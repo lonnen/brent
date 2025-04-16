@@ -77,7 +77,8 @@ class Brent(discord.Client):
 
     async def on_ready(self):
         await self.change_presence(
-            status=discord.Status.idle, activity=discord.Game("Raid Loading...")
+            status=discord.Status.idle,
+            activity=discord.CustomActivity("Raid Loading..."),
         )
         print(f"Logged in as {self.user} (ID: {self.user.id})")
 
@@ -94,9 +95,11 @@ class Brent(discord.Client):
         dt = arrow.humanize(
             now - self.last_sighting, only_distance=True, granularity=["hour", "minute"]
         )
-        self.change_presence(
+        await self.change_presence(
             status=discord.Status.online,
-            activity=discord.Game(f"{self.location} {dt} ago ({self.source})"),
+            activity=discord.CustomActivity(
+                f"{self.location} | {dt} ago ({self.source})"
+            ),
         )
 
     @poll_sightings.before_loop
