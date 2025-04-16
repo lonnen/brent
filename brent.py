@@ -43,7 +43,7 @@ class GoonTracker(Tracker):
     time_format = "YYYY-MM-DD HH:mm:ss"
 
     def parse(self, text):
-        return [x.text for x in text.find(id="trackings").tbody.tr.contents[:2]]
+        return [x.text for x in text.find('tbody').tr.contents[1:4:2]]
 
 
 class TarkovGoonTracker(Tracker):
