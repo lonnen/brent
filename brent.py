@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from enum import Enum
 import json
+import logging
 import os
 from typing import Tuple
 
@@ -9,6 +10,8 @@ from bs4 import BeautifulSoup
 import discord
 from discord.ext import tasks
 import requests
+
+logger = logging.getLogger(__name__)
 
 TOKEN = os.getenv("DISCORD_TOKEN", "F4K353C123TT0K3N")
 
@@ -31,13 +34,13 @@ class Tracker:
     def get_em(self) -> Tuple[str, datetime]:
         r = requests.get(self.url)
         if not r.ok:
-            print(f"Error while fetching {self.name} - {r.status_code}")
+            logger.error(f"Error while fetching {self.name} - {r.status_code}")
             return self.default_location, self.default_time
         soup = BeautifulSoup(r.text, "html.parser")
         try:
             l, t = self.parse(soup)
         except AttributeError as ae:
-            print(f"Error while fetching {self.name} - {ae}")
+            logger.error(f"Error while fetching {self.name} - {ae}")
             return self.default_location, self.default_time
         self.last_successful_check = arrow.now()
         return l, arrow.get(t, self.time_format)
@@ -88,7 +91,7 @@ class Brent(discord.Client):
             status=discord.Status.idle,
             activity=discord.CustomActivity("Raid Loading..."),
         )
-        print(f"Logged in as {self.user} (ID: {self.user.id})")
+        logger.info(f"Logged in as {self.user} (ID: {self.user.id})")
 
     @tasks.loop(seconds=300)  # every 5 minutes
     async def poll_sightings(self):
@@ -113,7 +116,7 @@ class Brent(discord.Client):
             ),
         )
         time_to_poll = (arrow.now() - now).seconds
-        print(f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds")
+        logger.info(f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds")
 
     @poll_sightings.before_loop
     async def before_polling(self):
