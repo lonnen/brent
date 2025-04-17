@@ -18,20 +18,28 @@ class Tracker:
     time_format: str = "MMM DD, YYYY HH:mm A ZZZ"
     url: str
 
+    default_location: str = "UNKOWN"
+    default_time: str = arrow.Arrow(1970, 1, 1, 0, 0, 0)
+
+    last_successful_check: arrow.Arrow
+    last_location_seen: str = default_location
+    last_time_seen: str = default_time
+
     def parse(self, text):
-        return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
+        return self.default_location, self.default_time
 
     def get_em(self) -> Tuple[str, datetime]:
         r = requests.get(self.url)
         if not r.ok:
             print(f"Error while fetching {self.name} - {r.status_code}")
-            return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
+            return self.default_location, self.default_time
         soup = BeautifulSoup(r.text, "html.parser")
         try:
             l, t = self.parse(soup)
         except AttributeError as ae:
             print(f"Error while fetching {self.name} - {ae}")
-            return "UNKNOWN", arrow.Arrow(1970, 1, 1, 0, 0, 0)
+            return self.default_location, self.default_time
+        self.last_successful_check = arrow.now()
         return l, arrow.get(t, self.time_format)
 
 
