@@ -11,6 +11,11 @@ import discord
 from discord.ext import tasks
 import requests
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 TOKEN = os.getenv("DISCORD_TOKEN", "F4K353C123TT0K3N")
@@ -116,7 +121,9 @@ class Brent(discord.Client):
             ),
         )
         time_to_poll = (arrow.now() - now).seconds
-        logger.info(f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds")
+        logger.info(
+            f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds"
+        )
 
     @poll_sightings.before_loop
     async def before_polling(self):
