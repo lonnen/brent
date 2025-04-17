@@ -84,9 +84,14 @@ class Brent(discord.Client):
 
     @tasks.loop(seconds=300)  # every 5 minutes
     async def poll_sightings(self):
+        successes = 0
         now = arrow.now()
         for tracker in self.trackers:
             loc, sighting = tracker.get_em()
+            if loc == Tracker.default_location:
+                continue
+            else:
+                successes += 1
             if sighting > self.last_sighting:
                 self.location = loc
                 self.last_sighting = sighting
@@ -99,6 +104,8 @@ class Brent(discord.Client):
                 f"{self.location} | {dt} ago ({self.source})"
             ),
         )
+        time_to_poll = (arrow.now() - now).seconds
+        print(f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds")
 
     @poll_sightings.before_loop
     async def before_polling(self):
