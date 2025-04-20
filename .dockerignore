@@ -1,0 +1,15 @@
+# added from .gitignore
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/*$py.class
+**/venv
+**/.eggs
+**/.pytest_cache
+**/*.egg-info
+**/.DS_Store
+.ruff_cache/**/*
+
+# in git but not in docker
+**/secret.env
+fly.toml

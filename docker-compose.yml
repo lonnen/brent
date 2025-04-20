@@ -1,0 +1,11 @@
+version: "3"
+services:
+  DiscordBot:
+    container_name: DiscordBotContainer
+    image: discordbot
+    build: .
+    volumes:
+      - ./brent/:/brent
+    env_file:
+      - secret.env
+    restart: unless-stopped
