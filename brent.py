@@ -129,5 +129,6 @@ class Brent(discord.Client):
         await self.wait_until_ready()
 
 
-client = Brent(intents=discord.Intents.default())
-client.run(TOKEN)
+if __name__ == "__main__":
+    client = Brent(intents=discord.Intents.default())
+    client.run(TOKEN)
