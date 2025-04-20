@@ -120,9 +120,8 @@ class Brent(discord.Client):
             ),
         )
         time_to_poll = (arrow.now() - now).seconds
-        logger.info(
-            f"Poll: {successes} of {len(self.trackers)} in {time_to_poll} seconds"
-        )
+        num_trackers = len(self.trackers)
+        logger.info(f"Poll: {successes} of {num_trackers} in {time_to_poll} seconds")
 
     @poll_sightings.before_loop
     async def before_polling(self):
