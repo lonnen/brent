@@ -15,4 +15,4 @@ COPY ./brent /brent
 
 WORKDIR /brent
 
-CMD ["python","-u","brent.py"]
+CMD ["python","-u","main.py"]
